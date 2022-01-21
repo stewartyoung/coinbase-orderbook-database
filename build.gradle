@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'org.springframework.boot' version '2.6.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+group 'io.stewart'
+version '1.0'
+def appName = 'coinbaseorderbook'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    logbackVersion = '1.2.10'
+    junitVersion = '5.7.0'
+    javaxwebsocketVersion = '1.0'
+    javaxjsonVersion = '1.0'
+    tyrusclientVersion = '1.1'
+    tyruscontainerVersion = '1.1'
+    glassfishjavaxjsonVersion = '1.0.1'
+}
+
+dependencies {
+    implementation(
+            "ch.qos.logback:logback-classic:${logbackVersion}",
+            "javax.websocket:javax.websocket-client-api:${javaxwebsocketVersion}",
+            "javax.json:javax.json-api:${javaxjsonVersion}",
+            "org.glassfish.tyrus:tyrus-client:${tyrusclientVersion}",
+            "org.glassfish.tyrus:tyrus-container-grizzly:${tyruscontainerVersion}",
+            "org.glassfish:javax.json:${glassfishjavaxjsonVersion}"
+
+    )
+    testImplementation (
+            "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    )
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'io.stewartyoung.man.Main'
+        )
+    }
+}
+
+shadowJar {
+    archiveFileName = "${appName}-${version}.jar"
+}
+
+build.dependsOn(shadowJar);
