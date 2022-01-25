@@ -1,39 +1,31 @@
 package io.stewartyoung.gcr;
 
+import io.stewartyoung.gcr.websockets.CoinbaseWebsocketClientEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
+import java.util.concurrent.CountDownLatch;
 
 public class Main {
 
-    private static Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
+        LOG.info("Starting Coinbase orderbook application");
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        Runtime.getRuntime().addShutdownHook(new Thread(countDownLatch::countDown));
+
+        CoinbaseWebsocketClientEndpoint coinbaseWebsocketClientEndpoint = new CoinbaseWebsocketClientEndpoint();
+        coinbaseWebsocketClientEndpoint.subscribe("BTC-USD");
+
         try {
-            logger.info("Starting Coinbase orderbook application");
+            countDownLatch.await();
+            coinbaseWebsocketClientEndpoint.close();
+        } catch (InterruptedException ignored) {
 
-            String coinbaseWebsocketEndpoint = "wss://ws-feed.exchange.coinbase.com/";
-
-            // open websocket
-            WebsocketClientEndpoint clientEndPoint = new WebsocketClientEndpoint(new URI(coinbaseWebsocketEndpoint));
-
-            // add listener
-            clientEndPoint.addMessageHandler(new WebsocketClientEndpoint.MessageHandler() {
-                public void handleMessage(String message) {
-                    System.out.println(message);
-                }
-            });
-
-            // send message to websocket
-            clientEndPoint.sendMessage("{'event':'addChannel','channel':'ok_btccny_ticker'}");
-
-            // wait 5 seconds for messages from websocket
-            Thread.sleep(5000);
-
-            logger.info("Connecting to coinbase websocket feed {}", coinbaseWebsocketEndpoint);
-        } catch (Throwable t) {
-            logger.info("Exiting Coinbase orderbook application: {}", t.getMessage());
         }
+        LOG.info("Exiting Coinbase orderbook application");
+
     }
 }

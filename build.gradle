@@ -19,9 +19,9 @@ ext {
     junitVersion = '5.7.0'
     javaxwebsocketVersion = '1.0'
     javaxjsonVersion = '1.0'
-    tyrusclientVersion = '1.1'
-    tyruscontainerVersion = '1.1'
+    tyrusclientVersion = '1.9'
     glassfishjavaxjsonVersion = '1.0.1'
+    jsonVersion = '20211205'
 }
 
 dependencies {
@@ -29,10 +29,8 @@ dependencies {
             "ch.qos.logback:logback-classic:${logbackVersion}",
             "javax.websocket:javax.websocket-client-api:${javaxwebsocketVersion}",
             "javax.json:javax.json-api:${javaxjsonVersion}",
-            "org.glassfish.tyrus:tyrus-client:${tyrusclientVersion}",
-            "org.glassfish.tyrus:tyrus-container-grizzly:${tyruscontainerVersion}",
-            "org.glassfish:javax.json:${glassfishjavaxjsonVersion}"
-
+            "org.glassfish.tyrus.bundles:tyrus-standalone-client:${tyrusclientVersion}",
+            "org.json:json:${jsonVersion}"
     )
     testImplementation (
             "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
