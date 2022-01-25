@@ -21,7 +21,7 @@ ext {
     javaxjsonVersion = '1.0'
     tyrusclientVersion = '1.9'
     glassfishjavaxjsonVersion = '1.0.1'
-    jsonVersion = '20211205'
+    jacksonVersion = '2.13.0'
 }
 
 dependencies {
@@ -30,7 +30,7 @@ dependencies {
             "javax.websocket:javax.websocket-client-api:${javaxwebsocketVersion}",
             "javax.json:javax.json-api:${javaxjsonVersion}",
             "org.glassfish.tyrus.bundles:tyrus-standalone-client:${tyrusclientVersion}",
-            "org.json:json:${jsonVersion}"
+            "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     )
     testImplementation (
             "org.junit.jupiter:junit-jupiter-api:${junitVersion}"

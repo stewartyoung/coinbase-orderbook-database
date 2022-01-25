@@ -1,6 +1,6 @@
 package io.stewartyoung.gcr.websockets;
 
-import io.stewartyoung.gcr.message.MessageFactory;
+import io.stewartyoung.gcr.message.L2SubscribeMessageGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public class CoinbaseWebsocketClientEndpoint {
             websocketClientEndpoint.connect();
 
             LOG.info("Subscribing to instrument: {}", instrument);
-            String l2SubsribeMessage = MessageFactory.getL2SubscribeMessage(instrument);
+            String l2SubsribeMessage = L2SubscribeMessageGenerator.getL2SubscribeMessage(instrument);
             LOG.info("Subscribe message: {}", l2SubsribeMessage);
             websocketClientEndpoint.sendMessage(l2SubsribeMessage);
 
