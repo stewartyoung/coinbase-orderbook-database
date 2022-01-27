@@ -21,7 +21,7 @@ public class L2SubscribeMessageGenerator
 {
     public static String getL2SubscribeMessage(String instrument)
     {
-        JsonNodeFactory jsonNodeFactory = new JsonNodeFactory(false); // or true, depending
+        JsonNodeFactory jsonNodeFactory = new JsonNodeFactory(false);
         ObjectNode message = new ObjectNode(jsonNodeFactory);
 
         ArrayNode product_ids1 = message.arrayNode();

@@ -1,5 +1,8 @@
 package io.stewartyoung.gcr.websockets;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +55,10 @@ public class WebsocketClientEndpoint {
      * @param message The text message
      */
     @OnMessage
-    public void onMessage(String message) {
-        messageHandler.handleMessage(message);
+    public void onMessage(String message) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonMessage = objectMapper.readTree(message);
+        messageHandler.handleMessage(jsonMessage);
     }
 
     /**
@@ -95,7 +100,7 @@ public class WebsocketClientEndpoint {
     }
 
     public interface MessageHandler {
-        void handleMessage(String message);
+        void handleMessage(JsonNode message);
     }
 
 }
