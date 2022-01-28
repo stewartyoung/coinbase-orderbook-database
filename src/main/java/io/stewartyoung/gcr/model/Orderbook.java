@@ -20,6 +20,26 @@ public class Orderbook {
         sortedBids.putAll(bids);
     }
 
+    public void l2UpdateOrderBook(OrderbookUpdate orderbookUpdate) {
+        List<Order> bids = orderbookUpdate.getBids();
+        for (Order order : bids) {
+            if (order.getSize().signum() == 0) {
+                sortedBids.remove(order.getPrice());
+            } else {
+                sortedBids.put(order.getPrice(), order.getSize());
+            }
+        }
+
+        List<Order> asks = orderbookUpdate.getAsks();
+        for (Order order : asks) {
+            if (order.getSize().signum() == 0) {
+                sortedAsks.remove(order.getPrice());
+            } else {
+                sortedAsks.put(order.getPrice(), order.getSize());
+            }
+        }
+    }
+
     public List<BigDecimal> getTopOrders(int numOrderbookLevels, String orderType) {
         TreeMap<BigDecimal, BigDecimal> sortedOrders = null;
         List<BigDecimal> topOrders = new ArrayList<>();

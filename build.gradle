@@ -22,6 +22,7 @@ ext {
     tyrusclientVersion = '1.9'
     glassfishjavaxjsonVersion = '1.0.1'
     jacksonVersion = '2.13.0'
+    lombokVersion = '1.18.22'
 }
 
 dependencies {
@@ -30,8 +31,10 @@ dependencies {
             "javax.websocket:javax.websocket-client-api:${javaxwebsocketVersion}",
             "javax.json:javax.json-api:${javaxjsonVersion}",
             "org.glassfish.tyrus.bundles:tyrus-standalone-client:${tyrusclientVersion}",
-            "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+            "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
+            "org.projectlombok:lombok:${lombokVersion}"
     )
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation (
             "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     )

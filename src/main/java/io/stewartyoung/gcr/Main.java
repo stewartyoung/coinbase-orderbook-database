@@ -12,6 +12,8 @@ public class Main {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws FileNotFoundException {
+//        PrintStream out = new PrintStream(new FileOutputStream("output.txt"));
+//        System.setOut(out);
         LOG.info("Starting Coinbase orderbook application");
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
