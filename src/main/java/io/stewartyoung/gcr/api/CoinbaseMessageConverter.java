@@ -7,15 +7,15 @@ import io.stewartyoung.gcr.model.OrderbookUpdate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
+import java.util.TreeMap;
 
 public class CoinbaseMessageConverter {
 
     public static Orderbook convertSnapshot(JsonNode snapshotJsonMessage) {
-        Map<BigDecimal, BigDecimal> asks = getPriceAndSizeMap(snapshotJsonMessage.get("asks"));
-        Map<BigDecimal, BigDecimal> bids = getPriceAndSizeMap(snapshotJsonMessage.get("bids"));
+        TreeMap<BigDecimal, BigDecimal> asks = getPriceAndSizeMap(snapshotJsonMessage.get("asks"), "asks");
+        TreeMap<BigDecimal, BigDecimal> bids = getPriceAndSizeMap(snapshotJsonMessage.get("bids"), "bids");
         
         return new Orderbook(asks, bids);
     }
@@ -42,8 +42,13 @@ public class CoinbaseMessageConverter {
         return new OrderbookUpdate(buyChanges, sellChanges);
     }
     
-    public static Map<BigDecimal, BigDecimal> getPriceAndSizeMap(JsonNode priceAndSizeArrayNode) {
-        Map<BigDecimal, BigDecimal> priceAndSizeMap = new HashMap<>();
+    public static TreeMap<BigDecimal, BigDecimal> getPriceAndSizeMap(JsonNode priceAndSizeArrayNode, String orderType) {
+        TreeMap<BigDecimal, BigDecimal> priceAndSizeMap = null;
+        if (orderType.equals("asks")) {
+            priceAndSizeMap = new TreeMap<>();
+        } else if (orderType.equals("bids")){
+            priceAndSizeMap = new TreeMap<>(Comparator.reverseOrder());
+        }
         for (JsonNode arr : priceAndSizeArrayNode) {
             BigDecimal price = new BigDecimal(arr.get(0).asText());
             BigDecimal size = new BigDecimal(arr.get(1).asText());

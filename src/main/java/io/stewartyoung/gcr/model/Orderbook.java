@@ -2,56 +2,54 @@ package io.stewartyoung.gcr.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class Orderbook {
-    // TODO: Can set to treemap initially in converter
-    private final TreeMap<BigDecimal, BigDecimal> sortedAsks;
-    private final TreeMap<BigDecimal, BigDecimal> sortedBids;
 
-    public Orderbook(Map<BigDecimal, BigDecimal> asks, Map<BigDecimal, BigDecimal> bids){
+    private final TreeMap<BigDecimal, BigDecimal> asks;
+    private final TreeMap<BigDecimal, BigDecimal> bids;
+
+    public Orderbook(TreeMap<BigDecimal, BigDecimal> asks, TreeMap<BigDecimal, BigDecimal> bids){
         // Using a TreeMap will sort the asks by price (the key) in ascending order
-        sortedAsks = new TreeMap<>(asks);
+        this.asks = asks;
         // A Treemap will sort the bids by price (the key) in descending order
-        sortedBids = new TreeMap<>(Comparator.reverseOrder());
-        sortedBids.putAll(bids);
+        this.bids = bids;
     }
 
     public void l2UpdateOrderBook(OrderbookUpdate orderbookUpdate) {
-        List<Order> bids = orderbookUpdate.getBids();
-        for (Order order : bids) {
+        List<Order> bidsList = orderbookUpdate.getBids();
+        for (Order order : bidsList) {
             if (order.getSize().signum() == 0) {
-                sortedBids.remove(order.getPrice());
+                bids.remove(order.getPrice());
             } else {
-                sortedBids.put(order.getPrice(), order.getSize());
+                bids.put(order.getPrice(), order.getSize());
             }
         }
 
-        List<Order> asks = orderbookUpdate.getAsks();
-        for (Order order : asks) {
+        List<Order> asksList = orderbookUpdate.getAsks();
+        for (Order order : asksList) {
             if (order.getSize().signum() == 0) {
-                sortedAsks.remove(order.getPrice());
+                asks.remove(order.getPrice());
             } else {
-                sortedAsks.put(order.getPrice(), order.getSize());
+                asks.put(order.getPrice(), order.getSize());
             }
         }
     }
 
     public List<BigDecimal> getTopOrders(int numOrderbookLevels, String orderType) {
-        TreeMap<BigDecimal, BigDecimal> sortedOrders = null;
+        TreeMap<BigDecimal, BigDecimal> orders = null;
         List<BigDecimal> topOrders = new ArrayList<>();
 
         if (orderType == "asks") {
-            sortedOrders = sortedAsks;
+            orders = asks;
         } else if (orderType == "bids") {
-            sortedOrders = sortedBids;
+            orders = bids;
         }
 
         int count = 0;
-        for (Map.Entry<BigDecimal, BigDecimal> entry : sortedOrders.entrySet()) {
+        for (Map.Entry<BigDecimal, BigDecimal> entry : orders.entrySet()) {
             if (count < numOrderbookLevels) {
                 topOrders.add(entry.getKey());
                 count++;
