@@ -1,11 +1,11 @@
-package io.stewartyoung.gcr.websockets;
+package io.stewartyoung.gsr.websockets;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.stewartyoung.gcr.api.CoinbaseMessageConverter;
-import io.stewartyoung.gcr.api.OrderBookPrinter;
-import io.stewartyoung.gcr.message.L2SubscribeMessageGenerator;
-import io.stewartyoung.gcr.model.OrderBook;
-import io.stewartyoung.gcr.model.OrderBookUpdate;
+import io.stewartyoung.gsr.api.CoinbaseMessageConverter;
+import io.stewartyoung.gsr.api.OrderBookPrinter;
+import io.stewartyoung.gsr.message.L2SubscribeMessageGenerator;
+import io.stewartyoung.gsr.model.OrderBook;
+import io.stewartyoung.gsr.model.OrderBookUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

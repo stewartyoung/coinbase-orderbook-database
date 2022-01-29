@@ -1,4 +1,4 @@
-package io.stewartyoung.gcr.model;
+package io.stewartyoung.gsr.model;
 
 import lombok.Getter;
 
@@ -51,6 +51,11 @@ public class OrderBook {
             orders = asks;
         } else if (orderType == "bids") {
             orders = bids;
+        }
+
+        // TODO: sanitise inputs, check for invalid params
+        if (orders.size() < numOrderBookLevels) {
+            throw new IllegalArgumentException("The number of orderbook levels " + numOrderBookLevels + " exceeds the number of orders " + orders.size());
         }
 
         int count = 0;

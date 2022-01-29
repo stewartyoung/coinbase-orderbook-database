@@ -1,9 +1,9 @@
-package io.stewartyoung.gcr.api;
+package io.stewartyoung.gsr.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.stewartyoung.gcr.model.Order;
-import io.stewartyoung.gcr.model.OrderBook;
-import io.stewartyoung.gcr.model.OrderBookUpdate;
+import io.stewartyoung.gsr.model.Order;
+import io.stewartyoung.gsr.model.OrderBook;
+import io.stewartyoung.gsr.model.OrderBookUpdate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

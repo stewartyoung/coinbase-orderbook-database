@@ -1,6 +1,6 @@
-package io.stewartyoung.gcr;
+package io.stewartyoung.gsr;
 
-import io.stewartyoung.gcr.websockets.CoinbaseWebsocketClientEndpoint;
+import io.stewartyoung.gsr.websockets.CoinbaseWebsocketClientEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,6 @@ public class Main {
         String instrument = args[0];
 
         LOG.info("Starting Coinbase order book application for: {}", instrument);
-
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Runtime.getRuntime().addShutdownHook(new Thread(countDownLatch::countDown));

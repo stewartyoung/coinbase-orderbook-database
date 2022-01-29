@@ -1,4 +1,4 @@
-package io.stewartyoung.gcr.message;
+package io.stewartyoung.gsr.message;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;

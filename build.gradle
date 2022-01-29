@@ -49,7 +49,7 @@ test {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'io.stewartyoung.man.Main'
+                'Main-Class': 'io.stewartyoung.gsr.Main'
         )
     }
 }

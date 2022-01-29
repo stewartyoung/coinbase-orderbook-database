@@ -1,4 +1,4 @@
-package io.stewartyoung.gcr.model;
+package io.stewartyoung.gsr.model;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
