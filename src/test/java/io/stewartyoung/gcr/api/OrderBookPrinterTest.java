@@ -14,7 +14,7 @@ import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class OrderbookPrinterTest {
+public class OrderBookPrinterTest {
 
     @Test
     public void testPrint() {
@@ -27,7 +27,7 @@ public class OrderbookPrinterTest {
             testBids.put(new BigDecimal(i * 100), new BigDecimal(i * 0.003));
         }
 
-        OrderBook testOrderbook = new OrderBook(testAsks, testBids);
+        OrderBook testOrderBook = new OrderBook(testAsks, testBids);
         OrderBookPrinter orderBookPrinter = new OrderBookPrinter();
 
         Logger orderBookPrinterLogger = (Logger) LoggerFactory.getLogger(OrderBookPrinter.class);
@@ -35,11 +35,11 @@ public class OrderbookPrinterTest {
         listAppender.start();
 
         orderBookPrinterLogger.addAppender(listAppender);
-        orderBookPrinter.print(testOrderbook);
+        orderBookPrinter.print(testOrderBook);
         List<ILoggingEvent> logsList = listAppender.list;
+
         TreeMap<BigDecimal, BigDecimal> expectedBids = new TreeMap<>(Collections.reverseOrder());
         expectedBids.putAll(testBids);
-
         String stringTestAsks = String.join(", ",
             testAsks.keySet().stream().map(
                     bigDecimal -> bigDecimal.toString()
@@ -48,6 +48,7 @@ public class OrderbookPrinterTest {
                 expectedBids.keySet().stream().map(
                         bigDecimal -> bigDecimal.toString()
                 ).toArray(String[]::new));
+
         assertTrue(logsList.get(0).getFormattedMessage().contains(stringTestAsks));
         assertTrue(logsList.get(1).getFormattedMessage().contains(stringTestBids));
     }

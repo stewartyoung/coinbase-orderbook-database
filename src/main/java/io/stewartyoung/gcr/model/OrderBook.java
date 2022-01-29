@@ -15,7 +15,7 @@ public class OrderBook {
     public OrderBook(TreeMap<BigDecimal, BigDecimal> asks, TreeMap<BigDecimal, BigDecimal> bids){
         // Using a TreeMap will sort the asks by price (the key) in ascending order
         this.asks = asks;
-        // A Treemap will sort the bids by price (the key) in descending order
+        // A Treemap with reverseOrder comparator will sort the bids by price (the key) in descending order
         this.bids = new TreeMap<>(Collections.reverseOrder());
         this.bids.putAll(bids);
     }

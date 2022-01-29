@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderbookUpdateTest {
+public class OrderBookUpdateTest {
     @Test
-    public void testOrderbookUpdate() {
+    public void testOrderBookUpdate() {
         List<Order> testAsks = new ArrayList<>();
         List<Order> testBids = new ArrayList<>();
         for (int i = 1; i < 10; i++) {
