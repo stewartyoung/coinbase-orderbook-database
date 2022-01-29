@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CoinbaseMessageConverterTest {
 
@@ -64,7 +65,23 @@ public class CoinbaseMessageConverterTest {
     }
 
     @Test
-    public void testGetPriceAndSizeMap() {
+    public void testGetPriceAndSizeMap() throws IOException {
+        JsonNode testSnapshotJsonMessage = objectMapper.readTree(this.getClass().getClassLoader().getResource("ExampleSnapshot.json"));
+        TreeMap<BigDecimal, BigDecimal> asks = coinbaseMessageConverter.getPriceAndSizeMap(testSnapshotJsonMessage.get("asks"), "asks");
+        TreeMap<BigDecimal, BigDecimal> bids = coinbaseMessageConverter.getPriceAndSizeMap(testSnapshotJsonMessage.get("bids"), "bids");
 
+        TreeMap<BigDecimal, BigDecimal> askPriceAndSizeMap = new TreeMap<>();
+        TreeMap<BigDecimal, BigDecimal> bidPriceAndSizeMap = new TreeMap<>(Comparator.reverseOrder());
+        JsonNode testAsks = testSnapshotJsonMessage.get("asks");
+        JsonNode testBids = testSnapshotJsonMessage.get("bids");
+        for (JsonNode arr: testAsks) {
+            askPriceAndSizeMap.put(new BigDecimal(arr.get(0).asText()), new BigDecimal(arr.get(1).asText()));
+        }
+        for (JsonNode arr: testBids) {
+            bidPriceAndSizeMap.put(new BigDecimal(arr.get(0).asText()), new BigDecimal(arr.get(1).asText()));
+        }
+
+        assertTrue(asks.equals(askPriceAndSizeMap));
+        assertTrue(bids.equals(bidPriceAndSizeMap));
     }
 }
