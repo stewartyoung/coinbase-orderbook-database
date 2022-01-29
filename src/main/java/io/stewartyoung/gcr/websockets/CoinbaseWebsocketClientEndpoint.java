@@ -2,10 +2,10 @@ package io.stewartyoung.gcr.websockets;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.stewartyoung.gcr.api.CoinbaseMessageConverter;
-import io.stewartyoung.gcr.api.OrderbookPrinter;
+import io.stewartyoung.gcr.api.OrderBookPrinter;
 import io.stewartyoung.gcr.message.L2SubscribeMessageGenerator;
-import io.stewartyoung.gcr.model.Orderbook;
-import io.stewartyoung.gcr.model.OrderbookUpdate;
+import io.stewartyoung.gcr.model.OrderBook;
+import io.stewartyoung.gcr.model.OrderBookUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +20,11 @@ public class CoinbaseWebsocketClientEndpoint {
     public final String coinbaseWebsocketUri = "wss://ws-feed.pro.coinbase.com/";
 
     private WebsocketClientEndpoint websocketClientEndpoint;
-    private Orderbook orderbook;
-    private final OrderbookPrinter orderbookPrinter = new OrderbookPrinter();
+    private OrderBook orderBook;
+    private final OrderBookPrinter orderBookPrinter = new OrderBookPrinter();
 
     public void subscribe(String instrument) {
         try {
-//            WebsocketClientEndpoint.MessageHandler coinbaseMessageHandler = LOG::info;
             websocketClientEndpoint = new WebsocketClientEndpoint(new URI(coinbaseWebsocketUri), this::handleCoinbaseJsonMessage);
 
             websocketClientEndpoint.connect();
@@ -47,34 +46,26 @@ public class CoinbaseWebsocketClientEndpoint {
         if (type == null) {
             LOG.debug("Skipping jsonMessage {}", jsonMessage);
         }
-//        if (type.equals("l2update")) {
-//            LOG.info("L2 update: {}", jsonMessage);
-//        }
-//        LOG.info(String.valueOf(jsonMessage));
         switch (type) {
             case "l2update":
                 handleL2Update(jsonMessage);
                 break;
-//            case "heartbeat":
-//                handleHeartbeat(jsonMessage);
             case "snapshot":
                 handleSnapshot(jsonMessage);
                 break;
-//            case "ticker":
-//                handleTicker(jsonMessage);
         }
     }
 
     public void handleSnapshot(JsonNode snapshotJsonMessage) {
-        orderbook = CoinbaseMessageConverter.convertSnapshot(snapshotJsonMessage);
-        orderbookPrinter.print(orderbook);
+        orderBook = CoinbaseMessageConverter.convertSnapshot(snapshotJsonMessage);
+        orderBookPrinter.print(orderBook);
     }
 
     public void handleL2Update(JsonNode l2JsonMessage) {
-        OrderbookUpdate orderbookUpdate = CoinbaseMessageConverter.convertL2(l2JsonMessage);
-        if (orderbook != null) {
-            orderbook.l2UpdateOrderBook(orderbookUpdate);
-            orderbookPrinter.print(orderbook);
+        OrderBookUpdate orderBookUpdate = CoinbaseMessageConverter.convertL2(l2JsonMessage);
+        if (orderBook != null) {
+            orderBook.l2UpdateOrderBook(orderBookUpdate);
+            orderBookPrinter.print(orderBook);
         }
     }
 

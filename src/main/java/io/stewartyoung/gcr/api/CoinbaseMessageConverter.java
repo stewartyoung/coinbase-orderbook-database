@@ -2,8 +2,8 @@ package io.stewartyoung.gcr.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.stewartyoung.gcr.model.Order;
-import io.stewartyoung.gcr.model.Orderbook;
-import io.stewartyoung.gcr.model.OrderbookUpdate;
+import io.stewartyoung.gcr.model.OrderBook;
+import io.stewartyoung.gcr.model.OrderBookUpdate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,14 +13,14 @@ import java.util.TreeMap;
 
 public class CoinbaseMessageConverter {
 
-    public static Orderbook convertSnapshot(JsonNode snapshotJsonMessage) {
+    public static OrderBook convertSnapshot(JsonNode snapshotJsonMessage) {
         TreeMap<BigDecimal, BigDecimal> asks = getPriceAndSizeMap(snapshotJsonMessage.get("asks"), "asks");
         TreeMap<BigDecimal, BigDecimal> bids = getPriceAndSizeMap(snapshotJsonMessage.get("bids"), "bids");
         
-        return new Orderbook(asks, bids);
+        return new OrderBook(asks, bids);
     }
 
-    public static OrderbookUpdate convertL2(JsonNode l2JsonMessage) {
+    public static OrderBookUpdate convertL2(JsonNode l2JsonMessage) {
         JsonNode changes = l2JsonMessage.get("changes").get(0);
         List<Order> buyChanges = new ArrayList<>();
         List<Order> sellChanges = new ArrayList<>();
@@ -39,7 +39,7 @@ public class CoinbaseMessageConverter {
                 break;
         }
 
-        return new OrderbookUpdate(buyChanges, sellChanges);
+        return new OrderBookUpdate(sellChanges, buyChanges);
     }
     
     public static TreeMap<BigDecimal, BigDecimal> getPriceAndSizeMap(JsonNode priceAndSizeArrayNode, String orderType) {

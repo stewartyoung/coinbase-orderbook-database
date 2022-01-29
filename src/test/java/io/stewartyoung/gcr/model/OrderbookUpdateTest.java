@@ -10,13 +10,13 @@ import java.util.List;
 public class OrderbookUpdateTest {
     @Test
     public void testOrderbookUpdate() {
-        List<Order> testBids = new ArrayList<>();
         List<Order> testAsks = new ArrayList<>();
+        List<Order> testBids = new ArrayList<>();
         for (int i = 1; i < 10; i++) {
-            testBids.add(new Order(new BigDecimal(i * 100), new BigDecimal(i * 0.003)));
             testAsks.add(new Order(new BigDecimal(i * 102), new BigDecimal(i * 0.003)));
+            testBids.add(new Order(new BigDecimal(i * 100), new BigDecimal(i * 0.003)));
         }
-        OrderBookUpdate orderBookUpdate = new OrderBookUpdate(testBids, testAsks);
+        OrderBookUpdate orderBookUpdate = new OrderBookUpdate(testAsks, testBids);
 
         for (int j = 0; j < testBids.size(); j++) {
             Assertions.assertEquals(0, testBids.get(j).getPrice().compareTo(orderBookUpdate.getBids().get(j).getPrice()));

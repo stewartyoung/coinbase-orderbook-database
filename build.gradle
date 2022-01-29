@@ -36,7 +36,8 @@ dependencies {
     )
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation (
-            "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+            "org.junit.jupiter:junit-jupiter-api:${junitVersion}",
+            "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     )
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 }
