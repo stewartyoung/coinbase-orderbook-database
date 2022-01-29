@@ -23,6 +23,7 @@ ext {
     glassfishjavaxjsonVersion = '1.0.1'
     jacksonVersion = '2.13.0'
     lombokVersion = '1.18.22'
+    mockitoVersion = '2.21.0'
 }
 
 dependencies {
@@ -37,7 +38,8 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation (
             "org.junit.jupiter:junit-jupiter-api:${junitVersion}",
-            "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+            "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
+            "org.mockito:mockito-core:${mockitoVersion}"
     )
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 }
