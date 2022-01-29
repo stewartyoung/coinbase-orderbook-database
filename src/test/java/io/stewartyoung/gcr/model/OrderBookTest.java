@@ -30,9 +30,7 @@ public class OrderBookTest {
                 l2Asks.add(new Order(new BigDecimal((21-i) * 100),new BigDecimal(i * 0.003)));
                 l2Bids.add(new Order(new BigDecimal(i * 100), new BigDecimal(i * 0.003)));
             }
-            // put asks in descending order to make sure printed in ascending by price
             initialAsks.put(new BigDecimal((21-i) * 100), new BigDecimal(i * 0.003));
-            // put bids in ascending order to make sure printed in descending by price
             initialBids.put(new BigDecimal(i * 100), new BigDecimal(i * 0.003));
         }
 
