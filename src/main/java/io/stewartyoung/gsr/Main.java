@@ -16,7 +16,7 @@ public class Main {
 //        System.setOut(out);
 
         if (args.length > 1) {
-            throw new IllegalArgumentException("Please pass one cryptocurrency pair as an argument. You passed " + args.toString() + " of size " + args.length);
+            throw new IllegalArgumentException("Please pass one cryptocurrency pair as an argument. You passed " + String.join(", ", args) + " of size " + args.length);
         }
 
         String instrument = args[0];

@@ -49,6 +49,10 @@ public class MainTest {
 
     @Test
     public void testMainWithInvalidArgs() {
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            Main.main(invalidTestArgs);
+        });
 
+        Assertions.assertTrue(thrown.getMessage().equals("Please pass one cryptocurrency pair as an argument. You passed " + String.join(", ", invalidTestArgs) + " of size " + invalidTestArgs.length));
     }
 }
