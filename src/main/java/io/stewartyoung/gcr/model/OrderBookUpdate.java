@@ -4,6 +4,8 @@ import lombok.Getter;
 
 import java.util.List;
 
+// TODO: Javadoc style comments
+
 public class OrderBookUpdate {
     @Getter
     private final List<Order> asks;
