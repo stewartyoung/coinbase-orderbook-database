@@ -1,5 +1,7 @@
 package io.stewartyoung.gcr.model;
 
+import lombok.Getter;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,8 +10,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class OrderBook {
-
+    @Getter
     private final TreeMap<BigDecimal, BigDecimal> asks;
+    @Getter
     private final TreeMap<BigDecimal, BigDecimal> bids;
 
     public OrderBook(TreeMap<BigDecimal, BigDecimal> asks, TreeMap<BigDecimal, BigDecimal> bids){
@@ -21,21 +24,21 @@ public class OrderBook {
     }
 
     public void l2UpdateOrderBook(OrderBookUpdate orderBookUpdate) {
-        List<Order> bidsList = orderBookUpdate.getBids();
-        for (Order order : bidsList) {
-            if (order.getSize().signum() == 0) {
-                bids.remove(order.getPrice());
-            } else {
-                bids.put(order.getPrice(), order.getSize());
-            }
-        }
-
         List<Order> asksList = orderBookUpdate.getAsks();
         for (Order order : asksList) {
             if (order.getSize().signum() == 0) {
                 asks.remove(order.getPrice());
             } else {
                 asks.put(order.getPrice(), order.getSize());
+            }
+        }
+
+        List<Order> bidsList = orderBookUpdate.getBids();
+        for (Order order : bidsList) {
+            if (order.getSize().signum() == 0) {
+                bids.remove(order.getPrice());
+            } else {
+                bids.put(order.getPrice(), order.getSize());
             }
         }
     }
