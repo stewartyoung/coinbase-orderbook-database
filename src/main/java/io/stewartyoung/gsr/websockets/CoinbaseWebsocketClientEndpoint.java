@@ -48,7 +48,7 @@ public class CoinbaseWebsocketClientEndpoint {
         }
         switch (type) {
             // we only care about these two types of messages in our case
-            // can handle more types if we need to here
+            // can handle more types in the future if we need to here
             case "l2update":
                 handleL2Update(jsonMessage);
                 break;
