@@ -19,6 +19,23 @@ Example:
 
 public class L2SubscribeMessageGenerator
 {
+    /**
+     * <p>Generates a l2 subscribe message for any given instrument passed in through command line.</p>
+     * <p>
+     * <div>
+     * Example:
+     * <p>{</p>
+     * <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"product_ids":[&lt;instrument&gt;],</p>
+     * <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"channels":["level2",</p>
+     * <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"heartbeat",</p>
+     * <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"product_ids":[&lt;instrument&gt;],"name":"ticker"}</p>
+     * <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;],</p>
+     * <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type":"subscribe"</p>
+     * <p>}</p>
+     * </div>
+     * @param instrument the instrument to subscribe to on coinbase
+     * @return a json string containing l2 subscribe message to send to coinbase
+     */
     public static String getL2SubscribeMessage(String instrument)
     {
         JsonNodeFactory jsonNodeFactory = new JsonNodeFactory(false);
