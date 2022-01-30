@@ -3,10 +3,16 @@ package io.stewartyoung.gsr.websockets;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
-import org.junit.jupiter.api.Assertions;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.stewartyoung.gsr.api.CoinbaseMessageConverter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+import org.mockito.Mock;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -15,7 +21,16 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class CoinbaseWebsocketClientEndpointTest {
+
+    @Mock
+    protected CoinbaseMessageConverter coinbaseMessageConverter;
+
+    @Mock
+    protected WebsocketClientEndpoint mockWebsocketClientEndpoint;
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(CoinbaseWebsocketClientEndpointTest.class);
     private CoinbaseWebsocketClientEndpoint coinbaseWebsocketClientEndpoint;
@@ -23,8 +38,6 @@ public class CoinbaseWebsocketClientEndpointTest {
 
     @Test
     public void testSubscribe() throws ExecutionException, InterruptedException {
-
-
         String testInstrument = "BTC_USD";
         String l2SubscribeMessageForBtcUsd = "{\"product_ids\":[\"BTC_USD\"],\"channels\":[\"level2\",\"heartbeat\",{\"product_ids\":[\"BTC_USD\"],\"name\":\"ticker\"}],\"type\":\"subscribe\"}";
 
@@ -51,9 +64,22 @@ public class CoinbaseWebsocketClientEndpointTest {
             LOG.info("Terminated CoinbaseWebsocketClientEndpoint.subscribe() future");
             boolean check = logsList.get(0).getFormattedMessage().contains("Subscribing to instrument: " + testInstrument);
             LOG.info("First line of logs: \"Subscribing to instrument: " + testInstrument + "\" is called? " + check);
-            Assertions.assertTrue(logsList.get(0).getFormattedMessage().contains("Subscribing to instrument: " + testInstrument));
+            assertTrue(logsList.get(0).getFormattedMessage().contains("Subscribing to instrument: " + testInstrument));
 
-            Assertions.assertTrue(logsList.get(1).getFormattedMessage().contains("Subscribe message: " + l2SubscribeMessageForBtcUsd));
+            assertTrue(logsList.get(1).getFormattedMessage().contains("Subscribe message: " + l2SubscribeMessageForBtcUsd));
         }
+    }
+
+    @Test
+    public void testHandleCoinbaseMessageShouldCallHandleSnapshotAndUpdateOrderbook() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode snapshotMessage = objectMapper.readTree(CoinbaseWebsocketClientEndpointTest.class.getClassLoader().getResource("ExampleSnapshot.json"));
+
+        coinbaseWebsocketClientEndpoint = new CoinbaseWebsocketClientEndpoint();
+        assertThrows(NullPointerException.class, (Executable) coinbaseWebsocketClientEndpoint.getOrderBook());
+
+        coinbaseWebsocketClientEndpoint.handleCoinbaseJsonMessage(snapshotMessage);
+        assertTrue(coinbaseWebsocketClientEndpoint.getOrderBook().getAsks().containsKey(new BigDecimal("36908.22")));
+        assertTrue(coinbaseWebsocketClientEndpoint.getOrderBook().getAsks().get(new BigDecimal("36908.22")).equals(new BigDecimal("0.00529780")));
     }
 }

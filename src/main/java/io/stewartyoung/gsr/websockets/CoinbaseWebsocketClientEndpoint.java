@@ -6,6 +6,8 @@ import io.stewartyoung.gsr.api.OrderBookPrinter;
 import io.stewartyoung.gsr.message.L2SubscribeMessageGenerator;
 import io.stewartyoung.gsr.model.OrderBook;
 import io.stewartyoung.gsr.model.OrderBookUpdate;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +22,8 @@ public class CoinbaseWebsocketClientEndpoint {
     private final String coinbaseWebsocketUri = "wss://ws-feed.pro.coinbase.com/";
 
     private WebsocketClientEndpoint websocketClientEndpoint;
+    private CoinbaseMessageConverter coinbaseMessageConverter;
+    @Getter(AccessLevel.PACKAGE)
     private OrderBook orderBook;
     private final OrderBookPrinter orderBookPrinter = new OrderBookPrinter();
 
@@ -42,6 +46,9 @@ public class CoinbaseWebsocketClientEndpoint {
     }
 
     public void handleCoinbaseJsonMessage(JsonNode jsonMessage) {
+        if (this.coinbaseMessageConverter == null) {
+            this.coinbaseMessageConverter = new CoinbaseMessageConverter();
+        }
         String type = jsonMessage.get("type").asText();
         if (type == null) {
             LOG.debug("Skipping jsonMessage {}", jsonMessage);
@@ -59,12 +66,12 @@ public class CoinbaseWebsocketClientEndpoint {
     }
 
     public void handleSnapshot(JsonNode snapshotJsonMessage) {
-        orderBook = CoinbaseMessageConverter.convertSnapshot(snapshotJsonMessage);
+        orderBook = coinbaseMessageConverter.convertSnapshot(snapshotJsonMessage);
         orderBookPrinter.print(orderBook);
     }
 
     public void handleL2Update(JsonNode l2JsonMessage) {
-        OrderBookUpdate orderBookUpdate = CoinbaseMessageConverter.convertL2(l2JsonMessage);
+        OrderBookUpdate orderBookUpdate = coinbaseMessageConverter.convertL2(l2JsonMessage);
         if (orderBook != null) {
             orderBook.l2UpdateOrderBook(orderBookUpdate);
             orderBookPrinter.print(orderBook);
