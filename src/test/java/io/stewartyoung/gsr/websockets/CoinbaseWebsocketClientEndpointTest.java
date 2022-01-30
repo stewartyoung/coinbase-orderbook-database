@@ -5,10 +5,12 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.stewartyoung.gsr.api.CoinbaseMessageConverter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -21,13 +23,13 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 public class CoinbaseWebsocketClientEndpointTest {
-
-    @Mock
-    protected CoinbaseMessageConverter coinbaseMessageConverter;
 
     @Mock
     protected WebsocketClientEndpoint mockWebsocketClientEndpoint;
@@ -35,6 +37,12 @@ public class CoinbaseWebsocketClientEndpointTest {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(CoinbaseWebsocketClientEndpointTest.class);
     private CoinbaseWebsocketClientEndpoint coinbaseWebsocketClientEndpoint;
     private List<ILoggingEvent> logsList;
+
+    @BeforeEach
+    public void setup() {
+        coinbaseWebsocketClientEndpoint = new CoinbaseWebsocketClientEndpoint();
+    }
+
 
     @Test
     public void testSubscribe() throws ExecutionException, InterruptedException {
@@ -48,7 +56,6 @@ public class CoinbaseWebsocketClientEndpointTest {
             listAppender.start();
 
             coinbaseWebsocketClientEndpointLogger.addAppender(listAppender);
-            coinbaseWebsocketClientEndpoint = new CoinbaseWebsocketClientEndpoint();
             logsList = listAppender.list;
             coinbaseWebsocketClientEndpoint.subscribe(testInstrument);
         };
@@ -75,11 +82,39 @@ public class CoinbaseWebsocketClientEndpointTest {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode snapshotMessage = objectMapper.readTree(CoinbaseWebsocketClientEndpointTest.class.getClassLoader().getResource("ExampleSnapshot.json"));
 
-        coinbaseWebsocketClientEndpoint = new CoinbaseWebsocketClientEndpoint();
         assertThrows(NullPointerException.class, (Executable) coinbaseWebsocketClientEndpoint.getOrderBook());
 
         coinbaseWebsocketClientEndpoint.handleCoinbaseJsonMessage(snapshotMessage);
         assertTrue(coinbaseWebsocketClientEndpoint.getOrderBook().getAsks().containsKey(new BigDecimal("36908.22")));
         assertTrue(coinbaseWebsocketClientEndpoint.getOrderBook().getAsks().get(new BigDecimal("36908.22")).equals(new BigDecimal("0.00529780")));
+    }
+
+    @Test
+    public void testHandleCoinbaseMessageShouldCallHandleL2AndUpdateOrderbookForL2BuyUpdate() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode snapshotMessage = objectMapper.readTree(CoinbaseWebsocketClientEndpointTest.class.getClassLoader().getResource("ExampleSnapshot.json"));
+        JsonNode l2Message = objectMapper.readTree(CoinbaseWebsocketClientEndpointTest.class.getClassLoader().getResource("ExampleL2BuyUpdate.json"));
+        coinbaseWebsocketClientEndpoint.handleCoinbaseJsonMessage(snapshotMessage);
+        coinbaseWebsocketClientEndpoint.handleL2Update(l2Message);
+        // orderbook should no longer have a bid entry of 36944.35
+        assertFalse(coinbaseWebsocketClientEndpoint.getOrderBook().getBids().containsKey(new BigDecimal("36944.35")));
+    }
+
+    @Test
+    public void testHandleCoinbaseMessageShouldCallHandleL2AndUpdateOrderbookForL2SellUpdate() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode snapshotMessage = objectMapper.readTree(CoinbaseWebsocketClientEndpointTest.class.getClassLoader().getResource("ExampleSnapshot.json"));
+        JsonNode l2Message = objectMapper.readTree(CoinbaseWebsocketClientEndpointTest.class.getClassLoader().getResource("ExampleL2SellUpdate.json"));
+        coinbaseWebsocketClientEndpoint.handleCoinbaseJsonMessage(snapshotMessage);
+        coinbaseWebsocketClientEndpoint.handleL2Update(l2Message);
+        // orderbook should no longer have an ask entry of 36991.04
+        assertFalse(coinbaseWebsocketClientEndpoint.getOrderBook().getAsks().containsKey(new BigDecimal("36991.04")));
+    }
+
+    @Test
+    public void testClose() {
+        coinbaseWebsocketClientEndpoint.setWebsocketClientEndpoint(mockWebsocketClientEndpoint);
+        coinbaseWebsocketClientEndpoint.close();
+        verify(mockWebsocketClientEndpoint).close();
     }
 }

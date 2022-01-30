@@ -8,6 +8,7 @@ import io.stewartyoung.gsr.model.OrderBook;
 import io.stewartyoung.gsr.model.OrderBookUpdate;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ public class CoinbaseWebsocketClientEndpoint {
     private final Logger LOG = LoggerFactory.getLogger(CoinbaseWebsocketClientEndpoint.class);
 
     private final String coinbaseWebsocketUri = "wss://ws-feed.pro.coinbase.com/";
-
+    @Setter(AccessLevel.PACKAGE)
     private WebsocketClientEndpoint websocketClientEndpoint;
     private CoinbaseMessageConverter coinbaseMessageConverter;
     @Getter(AccessLevel.PACKAGE)
