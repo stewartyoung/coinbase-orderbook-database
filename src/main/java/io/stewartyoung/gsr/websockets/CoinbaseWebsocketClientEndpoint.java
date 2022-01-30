@@ -17,9 +17,9 @@ import java.net.URISyntaxException;
 public class CoinbaseWebsocketClientEndpoint {
     private final Logger LOG = LoggerFactory.getLogger(CoinbaseWebsocketClientEndpoint.class);
 
-    public final String coinbaseWebsocketUri = "wss://ws-feed.pro.coinbase.com/";
+    private final String coinbaseWebsocketUri = "wss://ws-feed.pro.coinbase.com/";
 
-    public WebsocketClientEndpoint websocketClientEndpoint;
+    private WebsocketClientEndpoint websocketClientEndpoint;
     private OrderBook orderBook;
     private final OrderBookPrinter orderBookPrinter = new OrderBookPrinter();
 

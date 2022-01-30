@@ -28,9 +28,7 @@ public class MainTest {
         List<ILoggingEvent> logsList = listAppender.list;
 
         ExecutorService executorService = Executors.newFixedThreadPool(2);
-        Runnable runnableTask = () -> {
-            Main.main(testArgs);
-        };
+        Runnable runnableTask = () -> Main.main(testArgs);
 
         Future future = executorService.submit(runnableTask);
         try {
