@@ -11,3 +11,12 @@ This project contains a number of key components
 
 ## Java Implementation Specifics
 * Java 11
+
+## Running instructions
+This project includes a dockerfile, meaning if you have docker installed in your machine
+you can run this code from within a docker container on any device.
+```shell
+./gradlew clean build;
+./gradlew docker;
+docker run coinbaseorderbook:1.0
+```

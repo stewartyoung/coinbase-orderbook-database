@@ -1,8 +1,8 @@
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
-    id 'org.springframework.boot' version '2.6.2'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'com.palantir.docker' version '0.32.0'
+    id 'com.palantir.docker-run' version '0.32.0'
 }
 
 group 'io.stewart'
@@ -63,3 +63,13 @@ shadowJar {
 }
 
 build.dependsOn(shadowJar);
+
+docker {
+    name "${appName}:${version}"
+    files shadowJar.archivePath
+}
+
+dockerRun {
+    name "${appName}"
+    image "${appName}:${version}"
+}
