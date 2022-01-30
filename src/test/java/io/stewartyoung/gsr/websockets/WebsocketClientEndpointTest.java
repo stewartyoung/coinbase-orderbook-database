@@ -1,5 +1,7 @@
 package io.stewartyoung.gsr.websockets;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +15,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class WebsocketClientEndpointTest {
@@ -32,7 +35,19 @@ public class WebsocketClientEndpointTest {
     @Test
     public void testOnOpen() {
         websocketClientEndpoint.onOpen(session);
+        // assert sessions has been added as member variable of websocketClientEndpoint after onOpen
         assertEquals(session, websocketClientEndpoint.userSession);
+    }
+
+    @Test
+    public void testOnMessage() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode message = objectMapper.readTree(WebsocketClientEndpointTest.class.getClassLoader().getResource("ExampleL2BuyUpdate.json"));
+        String messageString = message.toString();
+        websocketClientEndpoint.onOpen(session);
+        websocketClientEndpoint.onMessage(messageString);
+        // verfify messageHandler.handleMessage() is called after onMessage
+        verify(messageHandler).handleMessage(message);
     }
 
 }
