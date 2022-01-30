@@ -21,14 +21,11 @@ public class CoinbaseMessageConverterTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
     private OrderBook testOrderBook;
-    private CoinbaseMessageConverter coinbaseMessageConverter;
-
-    // TODO: arrange, act, assert
+    private CoinbaseMessageConverter coinbaseMessageConverter = new CoinbaseMessageConverter();
 
     @Test
     public void testConvertSnapshot() throws IOException {
         JsonNode testSnapshotJsonMessage = objectMapper.readTree(this.getClass().getClassLoader().getResource("ExampleSnapshot.json"));
-        coinbaseMessageConverter = new CoinbaseMessageConverter();
         testOrderBook = coinbaseMessageConverter.convertSnapshot(testSnapshotJsonMessage);
         TreeMap<BigDecimal, BigDecimal> askPriceAndSizeMap = new TreeMap<>();
         TreeMap<BigDecimal, BigDecimal> bidPriceAndSizeMap = new TreeMap<>(Comparator.reverseOrder());
@@ -48,8 +45,14 @@ public class CoinbaseMessageConverterTest {
 
     @Test
     public void testConvertL2() throws IOException {
-        JsonNode testL2BuyJsonMessage = objectMapper.readTree(this.getClass().getClassLoader().getResource("ExampleL2BuyUpdate.json"));
         JsonNode testL2SellJsonMessage = objectMapper.readTree(this.getClass().getClassLoader().getResource("ExampleL2SellUpdate.json"));
+        JsonNode testL2BuyJsonMessage = objectMapper.readTree(this.getClass().getClassLoader().getResource("ExampleL2BuyUpdate.json"));
+
+        OrderBookUpdate sellUpdate = coinbaseMessageConverter.convertL2(testL2SellJsonMessage);
+        List<Order> expectedSellChanges = new ArrayList<>();
+        expectedSellChanges.add(new Order(new BigDecimal("36991.04"), new BigDecimal("0.00000000")));
+        OrderBookUpdate expectedSellUpdate = new OrderBookUpdate(expectedSellChanges, new ArrayList<>());
+        assertEquals(0, expectedSellUpdate.getAsks().get(0).getPrice().compareTo(sellUpdate.getAsks().get(0).getPrice()));
 
         OrderBookUpdate buyUpdate = coinbaseMessageConverter.convertL2(testL2BuyJsonMessage);
         List<Order> expectedBuyChanges = new ArrayList<>();
@@ -57,11 +60,7 @@ public class CoinbaseMessageConverterTest {
         OrderBookUpdate expectedBuyUpdate = new OrderBookUpdate(new ArrayList<>(), expectedBuyChanges);
         assertEquals(0, expectedBuyUpdate.getBids().get(0).getPrice().compareTo(buyUpdate.getBids().get(0).getPrice()));
 
-        OrderBookUpdate sellUpdate = coinbaseMessageConverter.convertL2(testL2SellJsonMessage);
-        List<Order> expectedSellChanges = new ArrayList<>();
-        expectedSellChanges.add(new Order(new BigDecimal("36991.04"), new BigDecimal("0.00000000")));
-        OrderBookUpdate expectedSellUpdate = new OrderBookUpdate(expectedSellChanges, new ArrayList<>());
-        assertEquals(0, expectedSellUpdate.getAsks().get(0).getPrice().compareTo(sellUpdate.getAsks().get(0).getPrice()));
+
     }
 
     @Test

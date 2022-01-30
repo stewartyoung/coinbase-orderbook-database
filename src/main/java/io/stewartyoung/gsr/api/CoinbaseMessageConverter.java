@@ -12,7 +12,11 @@ import java.util.List;
 import java.util.TreeMap;
 
 public class CoinbaseMessageConverter {
-
+    /**
+     * Converts a "snapshot" json message from the coinbase websocket feed into the internal model OrderBook of asks and bids
+     * @param snapshotJsonMessage a "snapshot" json message from the coinbase websocket feed
+     * @return OrderBook of asks and bids
+     */
     public static OrderBook convertSnapshot(JsonNode snapshotJsonMessage) {
         TreeMap<BigDecimal, BigDecimal> asks = getPriceAndSizeMap(snapshotJsonMessage.get("asks"), "asks");
         TreeMap<BigDecimal, BigDecimal> bids = getPriceAndSizeMap(snapshotJsonMessage.get("bids"), "bids");
@@ -20,6 +24,12 @@ public class CoinbaseMessageConverter {
         return new OrderBook(asks, bids);
     }
 
+    /**
+     * Converts an "l2" json message from the coinbase websocket feed into the internal model OrderBookUpdate
+     * which contains sellChanges and buyChanges.
+     * @param l2JsonMessage a "snapshot" json message from the coinbase websocket feed
+     * @return OrderBookUpdate of sellChanges and buyChanges, which update OrderBook asks and bids
+     */
     public static OrderBookUpdate convertL2(JsonNode l2JsonMessage) {
         JsonNode changes = l2JsonMessage.get("changes").get(0);
         List<Order> buyChanges = new ArrayList<>();
@@ -41,7 +51,13 @@ public class CoinbaseMessageConverter {
 
         return new OrderBookUpdate(sellChanges, buyChanges);
     }
-    
+
+    /**
+     * Takes either asks or bids array from snapshot message and makes a TreeMap of price and size
+     * @param priceAndSizeArrayNode an array containing orders of price and corresponding size
+     * @param orderType either "asks" or "bids" array
+     * @return
+     */
     public static TreeMap<BigDecimal, BigDecimal> getPriceAndSizeMap(JsonNode priceAndSizeArrayNode, String orderType) {
         TreeMap<BigDecimal, BigDecimal> priceAndSizeMap = null;
         if (orderType.equals("asks")) {
