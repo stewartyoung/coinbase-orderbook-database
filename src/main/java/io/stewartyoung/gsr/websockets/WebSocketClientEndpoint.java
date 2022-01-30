@@ -22,25 +22,37 @@ import java.net.URI;
 
 
 @ClientEndpoint
-public class WebsocketClientEndpoint {
+public class WebSocketClientEndpoint {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WebsocketClientEndpoint.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WebSocketClientEndpoint.class);
 
     private final URI endpointUri;
     @Getter
     private Session userSession = null;
     private final MessageHandler messageHandler;
     @Getter
-    private WebSocketContainer websocketContainer;
+    private WebSocketContainer webSocketContainer;
 
-    public WebsocketClientEndpoint(URI endpointUri, MessageHandler messageHandler) throws DeploymentException, IOException {
+    /**
+     * Instantiate an endpoint for a WebSockets feed.
+     * @param endpointUri a Uri for where to connect to e.g. "wss://ws-feed.pro.coinbase.com/"
+     * @param messageHandler interface for the logic of how to handle messages from the WebSockets feed
+     * @throws DeploymentException
+     * @throws IOException
+     */
+    public WebSocketClientEndpoint(URI endpointUri, MessageHandler messageHandler) throws DeploymentException, IOException {
         this.endpointUri = endpointUri;
         this.messageHandler = messageHandler;
     }
 
+    /**
+     * Connect to the given URI via WebSockets.
+     * @throws DeploymentException
+     * @throws IOException
+     */
     public void connect() throws DeploymentException, IOException {
-        this.websocketContainer = ContainerProvider.getWebSocketContainer();
-        websocketContainer.connectToServer(this, endpointUri);
+        this.webSocketContainer = ContainerProvider.getWebSocketContainer();
+        webSocketContainer.connectToServer(this, endpointUri);
     }
 
     /**
@@ -103,6 +115,9 @@ public class WebsocketClientEndpoint {
         }
     }
 
+    /**
+     * Interface for the logic of how to handle messages from the WebSockets feed.
+     */
     public interface MessageHandler {
         void handleMessage(JsonNode message);
     }

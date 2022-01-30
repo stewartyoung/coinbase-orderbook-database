@@ -27,14 +27,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class WebsocketClientEndpointTest {
+public class WebSocketClientEndpointTest {
     @Mock
     protected Session session;
 
     @Mock
-    protected WebsocketClientEndpoint.MessageHandler messageHandler;
+    protected WebSocketClientEndpoint.MessageHandler messageHandler;
 
-    private WebsocketClientEndpoint websocketClientEndpoint;
+    private WebSocketClientEndpoint websocketClientEndpoint;
 
     private ObjectMapper objectMapper = new ObjectMapper();
     private JsonNode message;
@@ -42,15 +42,15 @@ public class WebsocketClientEndpointTest {
 
     @BeforeEach
     public void setup() throws URISyntaxException, DeploymentException, IOException {
-        websocketClientEndpoint = new WebsocketClientEndpoint(new URI("wss://ws-feed.pro.coinbase.com/"), messageHandler);
-        message = objectMapper.readTree(WebsocketClientEndpointTest.class.getClassLoader().getResource("ExampleL2BuyUpdate.json"));
+        websocketClientEndpoint = new WebSocketClientEndpoint(new URI("wss://ws-feed.pro.coinbase.com/"), messageHandler);
+        message = objectMapper.readTree(WebSocketClientEndpointTest.class.getClassLoader().getResource("ExampleL2BuyUpdate.json"));
         messageString = message.toString();
     }
 
     @Test
     public void testConnect() throws DeploymentException, IOException {
         websocketClientEndpoint.connect();
-        assertTrue(websocketClientEndpoint.getWebsocketContainer() instanceof ClientManager);
+        assertTrue(websocketClientEndpoint.getWebSocketContainer() instanceof ClientManager);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class WebsocketClientEndpointTest {
 
     @Test
     public void testOnError() {
-        Logger websocketClientEndpointLogger = (Logger) LoggerFactory.getLogger(WebsocketClientEndpoint.class);
+        Logger websocketClientEndpointLogger = (Logger) LoggerFactory.getLogger(WebSocketClientEndpoint.class);
         websocketClientEndpointLogger.setLevel(Level.ERROR);
         ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
         listAppender.start();
@@ -89,9 +89,9 @@ public class WebsocketClientEndpointTest {
 
     @Test
     public void testSendMessage() throws DeploymentException, IOException, URISyntaxException {
-        WebsocketClientEndpoint testWebsocketClientEndpoint = new WebsocketClientEndpoint(new URI("wss://ws-feed.pro.coinbase.com/"), messageHandler);
-        testWebsocketClientEndpoint.connect();
-        testWebsocketClientEndpoint.sendMessage(messageString);
+        WebSocketClientEndpoint testWebSocketClientEndpoint = new WebSocketClientEndpoint(new URI("wss://ws-feed.pro.coinbase.com/"), messageHandler);
+        testWebSocketClientEndpoint.connect();
+        testWebSocketClientEndpoint.sendMessage(messageString);
     }
 
     @Test

@@ -1,7 +1,6 @@
 package io.stewartyoung.gsr.model;
 
 import org.junit.jupiter.api.Test;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;

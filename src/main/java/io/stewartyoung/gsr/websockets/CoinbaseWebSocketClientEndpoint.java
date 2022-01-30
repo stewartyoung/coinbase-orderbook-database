@@ -17,27 +17,31 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class CoinbaseWebsocketClientEndpoint {
-    private final Logger LOG = LoggerFactory.getLogger(CoinbaseWebsocketClientEndpoint.class);
+public class CoinbaseWebSocketClientEndpoint {
+    private final Logger LOG = LoggerFactory.getLogger(CoinbaseWebSocketClientEndpoint.class);
 
-    private final String coinbaseWebsocketUri = "wss://ws-feed.pro.coinbase.com/";
+    private final String coinbaseWebSocketUri = "wss://ws-feed.pro.coinbase.com/";
     @Setter(AccessLevel.PACKAGE)
-    private WebsocketClientEndpoint websocketClientEndpoint;
+    private WebSocketClientEndpoint webSocketClientEndpoint;
     private CoinbaseMessageConverter coinbaseMessageConverter;
     @Getter(AccessLevel.PACKAGE)
     private OrderBook orderBook;
     private final OrderBookPrinter orderBookPrinter = new OrderBookPrinter();
 
+    /**
+     * Subscribe via WebSockets feed to an instrument on Coinbase.
+     * @param instrument
+     */
     public void subscribe(String instrument) {
         try {
-            websocketClientEndpoint = new WebsocketClientEndpoint(new URI(coinbaseWebsocketUri), this::handleCoinbaseJsonMessage);
+            webSocketClientEndpoint = new WebSocketClientEndpoint(new URI(coinbaseWebSocketUri), this::handleCoinbaseJsonMessage);
 
-            websocketClientEndpoint.connect();
+            webSocketClientEndpoint.connect();
 
             LOG.info("Subscribing to instrument: {}", instrument);
             String l2SubsribeMessage = L2SubscribeMessageGenerator.getL2SubscribeMessage(instrument);
             LOG.info("Subscribe message: {}", l2SubsribeMessage);
-            websocketClientEndpoint.sendMessage(l2SubsribeMessage);
+            webSocketClientEndpoint.sendMessage(l2SubsribeMessage);
 
         } catch (DeploymentException | IOException e) {
             LOG.error("Error in endpoint configuration", e.getMessage());
@@ -46,6 +50,10 @@ public class CoinbaseWebsocketClientEndpoint {
         }
     }
 
+    /**
+     * Handles an incoming json message from the WebSockets feed.
+     * @param jsonMessage the json message from the WebSockets feed
+     */
     public void handleCoinbaseJsonMessage(JsonNode jsonMessage) {
         if (this.coinbaseMessageConverter == null) {
             this.coinbaseMessageConverter = new CoinbaseMessageConverter();
@@ -66,11 +74,19 @@ public class CoinbaseWebsocketClientEndpoint {
         }
     }
 
+    /**
+     * Specifically handles Coinbase messages with type "snapshot"
+     * @param snapshotJsonMessage the snapshot json message from the WebSockets feed
+     */
     public void handleSnapshot(JsonNode snapshotJsonMessage) {
         orderBook = coinbaseMessageConverter.convertSnapshot(snapshotJsonMessage);
         orderBookPrinter.print(orderBook);
     }
 
+    /**
+     * Specifically handles Coinbase messages with type "l2update"
+     * @param l2JsonMessage the l2update json message from the WebSockets feed
+     */
     public void handleL2Update(JsonNode l2JsonMessage) {
         OrderBookUpdate orderBookUpdate = coinbaseMessageConverter.convertL2(l2JsonMessage);
         if (orderBook != null) {
@@ -79,5 +95,8 @@ public class CoinbaseWebsocketClientEndpoint {
         }
     }
 
-    public void close() {websocketClientEndpoint.close();}
+    /**
+     * Closes the Coinbase WebSockets feed.
+     */
+    public void close() {webSocketClientEndpoint.close();}
 }

@@ -15,6 +15,11 @@ public class OrderBook {
     @Getter
     private final TreeMap<BigDecimal, BigDecimal> bids;
 
+    /**
+     * Model for OrderBook of Orders.
+     * @param asks contains a TreeMap of asks prices and sizes
+     * @param bids contains a TreeMap of bids prices and sizes
+     */
     public OrderBook(TreeMap<BigDecimal, BigDecimal> asks, TreeMap<BigDecimal, BigDecimal> bids){
         // Using a TreeMap will sort the asks by price (the key) in ascending order
         this.asks = asks;
@@ -23,6 +28,10 @@ public class OrderBook {
         this.bids.putAll(bids);
     }
 
+    /**
+     * Updates Orderbook using an OrderBookUpdate generated from l2 message.
+     * @param orderBookUpdate an OrderBookUpdate generated from l2 message.
+     */
     public void l2UpdateOrderBook(OrderBookUpdate orderBookUpdate) {
         List<Order> asksList = orderBookUpdate.getAsks();
         for (Order order : asksList) {
@@ -43,6 +52,12 @@ public class OrderBook {
         }
     }
 
+    /**
+     * Gets the top orders from an OrderBook asks or bids list given numOrderBookLevels.
+     * @param numOrderBookLevels Number of levels desired for the OrderBook command line print
+     * @param orderType OrderBook asks or bids to use
+     * @return
+     */
     public List<BigDecimal> getTopOrders(int numOrderBookLevels, String orderType) {
         TreeMap<BigDecimal, BigDecimal> orders = null;
         List<BigDecimal> topOrders = new ArrayList<>();

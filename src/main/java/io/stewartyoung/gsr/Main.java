@@ -1,6 +1,6 @@
 package io.stewartyoung.gsr;
 
-import io.stewartyoung.gsr.websockets.CoinbaseWebsocketClientEndpoint;
+import io.stewartyoung.gsr.websockets.CoinbaseWebSocketClientEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,9 +11,9 @@ public class Main {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        // Uncomment below two lines, import packages, and throw exceptions, if you'd like to store logs for debugging
-//        PrintStream out = new PrintStream(new FileOutputStream("debugging.txt"));
-//        System.setOut(out);
+        // Uncomment the below two lines, import packages, and throw exceptions, if you'd like to store logs for debugging
+        // PrintStream out = new PrintStream(new FileOutputStream("debugging.txt"));
+        // System.setOut(out);
 
         if (args.length > 1) {
             throw new IllegalArgumentException("Please pass one cryptocurrency pair as an argument. You passed " + String.join(", ", args) + " of size " + args.length);
@@ -26,13 +26,13 @@ public class Main {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Runtime.getRuntime().addShutdownHook(new Thread(countDownLatch::countDown));
 
-        CoinbaseWebsocketClientEndpoint coinbaseWebsocketClientEndpoint = new CoinbaseWebsocketClientEndpoint();
-        coinbaseWebsocketClientEndpoint.subscribe(args[0]);
+        CoinbaseWebSocketClientEndpoint coinbaseWebSocketClientEndpoint = new CoinbaseWebSocketClientEndpoint();
+        coinbaseWebSocketClientEndpoint.subscribe(args[0]);
 
         try {
             countDownLatch.await();
             LOG.info("Exiting Coinbase order book application");
-            coinbaseWebsocketClientEndpoint.close();
+            coinbaseWebSocketClientEndpoint.close();
         } catch (InterruptedException ignored) {
 
         }
