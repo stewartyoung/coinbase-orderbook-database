@@ -88,9 +88,10 @@ public class WebsocketClientEndpointTest {
     }
 
     @Test
-    public void testSendMessage() {
-        websocketClientEndpoint.onOpen(session);
-        websocketClientEndpoint.sendMessage(messageString);
+    public void testSendMessage() throws DeploymentException, IOException, URISyntaxException {
+        WebsocketClientEndpoint testWebsocketClientEndpoint = new WebsocketClientEndpoint(new URI("wss://ws-feed.pro.coinbase.com/"), messageHandler);
+        testWebsocketClientEndpoint.connect();
+        testWebsocketClientEndpoint.sendMessage(messageString);
     }
 
     @Test
