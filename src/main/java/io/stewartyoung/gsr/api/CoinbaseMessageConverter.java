@@ -13,8 +13,8 @@ import java.util.TreeMap;
 
 public class CoinbaseMessageConverter {
     /**
-     * Converts a "snapshot" json message from the coinbase websocket feed into the internal model OrderBook of asks and bids.
-     * @param snapshotJsonMessage a "snapshot" json message from the coinbase websocket feed
+     * Converts a "snapshot" json message from the Coinbase websocket feed into the internal model OrderBook of asks and bids.
+     * @param snapshotJsonMessage a "snapshot" json message from the Coinbase websocket feed
      * @return OrderBook of asks and bids
      */
     public static OrderBook convertSnapshot(JsonNode snapshotJsonMessage) {
@@ -25,9 +25,9 @@ public class CoinbaseMessageConverter {
     }
 
     /**
-     * Converts an "l2" json message from the coinbase websocket feed into the internal model OrderBookUpdate
+     * Converts an "l2" json message from the Coinbase websocket feed into the internal model OrderBookUpdate
      * which contains sellChanges and buyChanges.
-     * @param l2JsonMessage a "snapshot" json message from the coinbase websocket feed
+     * @param l2JsonMessage a "snapshot" json message from the Coinbase websocket feed
      * @return OrderBookUpdate of sellChanges and buyChanges, which update OrderBook asks and bids
      */
     public static OrderBookUpdate convertL2(JsonNode l2JsonMessage) {

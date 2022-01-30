@@ -33,8 +33,8 @@ public class L2SubscribeMessageGenerator
      * <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type":"subscribe"</p>
      * <p>}</p>
      * </div>
-     * @param instrument the instrument to subscribe to on coinbase
-     * @return a json string containing l2 subscribe message to send to coinbase
+     * @param instrument the instrument to subscribe to on Coinbase
+     * @return a json string containing l2 subscribe message to send to Coinbase
      */
     public static String getL2SubscribeMessage(String instrument)
     {
