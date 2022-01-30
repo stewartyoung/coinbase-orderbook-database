@@ -24,6 +24,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class WebsocketClientEndpointTest {
@@ -35,9 +36,15 @@ public class WebsocketClientEndpointTest {
 
     private WebsocketClientEndpoint websocketClientEndpoint;
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+    private JsonNode message;
+    private String messageString;
+
     @BeforeEach
     public void setup() throws URISyntaxException, DeploymentException, IOException {
         websocketClientEndpoint = new WebsocketClientEndpoint(new URI("wss://ws-feed.pro.coinbase.com/"), messageHandler);
+        message = objectMapper.readTree(WebsocketClientEndpointTest.class.getClassLoader().getResource("ExampleL2BuyUpdate.json"));
+        messageString = message.toString();
     }
 
     @Test
@@ -55,9 +62,6 @@ public class WebsocketClientEndpointTest {
 
     @Test
     public void testOnMessage() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode message = objectMapper.readTree(WebsocketClientEndpointTest.class.getClassLoader().getResource("ExampleL2BuyUpdate.json"));
-        String messageString = message.toString();
         websocketClientEndpoint.onOpen(session);
         websocketClientEndpoint.onMessage(messageString);
         // verify messageHandler.handleMessage() is called after onMessage
@@ -81,6 +85,23 @@ public class WebsocketClientEndpointTest {
 
         websocketClientEndpoint.onError(session, new Throwable());
         assertTrue(logsList.get(0).getMessage().contains("Error for the session"));
+    }
+
+    @Test
+    public void testSendMessage() {
+        websocketClientEndpoint.onOpen(session);
+        websocketClientEndpoint.sendMessage(messageString);
+    }
+
+    @Test
+    public void testClose() throws IOException {
+        websocketClientEndpoint.onOpen(session);
+        assertEquals(session, websocketClientEndpoint.getUserSession());
+
+        when(session.isOpen()).thenReturn(true);
+        websocketClientEndpoint.close();
+        verify(session).isOpen();
+        verify(session).close();
     }
 
 }
