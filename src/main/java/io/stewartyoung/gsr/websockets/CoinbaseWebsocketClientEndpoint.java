@@ -19,7 +19,7 @@ public class CoinbaseWebsocketClientEndpoint {
 
     public final String coinbaseWebsocketUri = "wss://ws-feed.pro.coinbase.com/";
 
-    private WebsocketClientEndpoint websocketClientEndpoint;
+    public WebsocketClientEndpoint websocketClientEndpoint;
     private OrderBook orderBook;
     private final OrderBookPrinter orderBookPrinter = new OrderBookPrinter();
 

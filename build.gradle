@@ -24,6 +24,7 @@ ext {
     jacksonVersion = '2.13.0'
     lombokVersion = '1.18.22'
     mockitoVersion = '2.21.0'
+    mockitoJunitVersion = '2.23.0'
 }
 
 dependencies {
@@ -33,7 +34,8 @@ dependencies {
             "javax.json:javax.json-api:${javaxjsonVersion}",
             "org.glassfish.tyrus.bundles:tyrus-standalone-client:${tyrusclientVersion}",
             "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
-            "org.projectlombok:lombok:${lombokVersion}"
+            "org.projectlombok:lombok:${lombokVersion}",
+            "org.mockito:mockito-junit-jupiter:${mockitoJunitVersion}"
     )
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation (

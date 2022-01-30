@@ -26,7 +26,8 @@ public class WebsocketClientEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(WebsocketClientEndpoint.class);
 
     private final URI endpointUri;
-    private Session userSession = null;
+//    @Getter
+    public Session userSession = null;
     private final MessageHandler messageHandler;
 
     public WebsocketClientEndpoint(URI endpointUri, MessageHandler messageHandler) throws DeploymentException, IOException {
