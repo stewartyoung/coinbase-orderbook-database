@@ -2,6 +2,7 @@ package io.stewartyoung.gsr.websockets;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.glassfish.tyrus.client.ClientManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,10 +35,16 @@ public class WebsocketClientEndpointTest {
     }
 
     @Test
+    public void testConnect() throws DeploymentException, IOException {
+        websocketClientEndpoint.connect();
+        assertTrue(websocketClientEndpoint.getWebsocketContainer() instanceof ClientManager);
+    }
+
+    @Test
     public void testOnOpen() {
         websocketClientEndpoint.onOpen(session);
         // assert sessions has been added as member variable of websocketClientEndpoint after onOpen
-        assertEquals(session, websocketClientEndpoint.userSession);
+        assertEquals(session, websocketClientEndpoint.getUserSession());
     }
 
     @Test
@@ -46,7 +54,7 @@ public class WebsocketClientEndpointTest {
         String messageString = message.toString();
         websocketClientEndpoint.onOpen(session);
         websocketClientEndpoint.onMessage(messageString);
-        // verfify messageHandler.handleMessage() is called after onMessage
+        // verify messageHandler.handleMessage() is called after onMessage
         verify(messageHandler).handleMessage(message);
     }
 

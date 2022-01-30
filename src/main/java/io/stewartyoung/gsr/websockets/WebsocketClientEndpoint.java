@@ -3,6 +3,7 @@ package io.stewartyoung.gsr.websockets;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +27,11 @@ public class WebsocketClientEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(WebsocketClientEndpoint.class);
 
     private final URI endpointUri;
-//    @Getter
-    public Session userSession = null;
+    @Getter
+    private Session userSession = null;
     private final MessageHandler messageHandler;
+    @Getter
+    private WebSocketContainer websocketContainer;
 
     public WebsocketClientEndpoint(URI endpointUri, MessageHandler messageHandler) throws DeploymentException, IOException {
         this.endpointUri = endpointUri;
@@ -36,8 +39,8 @@ public class WebsocketClientEndpoint {
     }
 
     public void connect() throws DeploymentException, IOException {
-        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-        container.connectToServer(this, endpointUri);
+        this.websocketContainer = ContainerProvider.getWebSocketContainer();
+        websocketContainer.connectToServer(this, endpointUri);
     }
 
     /**
