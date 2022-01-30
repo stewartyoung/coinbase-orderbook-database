@@ -58,4 +58,10 @@ public class WebsocketClientEndpointTest {
         verify(messageHandler).handleMessage(message);
     }
 
+    @Test
+    public void testOnClose() {
+        websocketClientEndpoint.close();
+        assertEquals(websocketClientEndpoint.getUserSession(), null);
+    }
+
 }
