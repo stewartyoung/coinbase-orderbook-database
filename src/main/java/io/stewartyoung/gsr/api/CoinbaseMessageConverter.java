@@ -13,7 +13,7 @@ import java.util.TreeMap;
 
 public class CoinbaseMessageConverter {
     /**
-     * Converts a "snapshot" json message from the coinbase websocket feed into the internal model OrderBook of asks and bids
+     * Converts a "snapshot" json message from the coinbase websocket feed into the internal model OrderBook of asks and bids.
      * @param snapshotJsonMessage a "snapshot" json message from the coinbase websocket feed
      * @return OrderBook of asks and bids
      */
@@ -53,7 +53,7 @@ public class CoinbaseMessageConverter {
     }
 
     /**
-     * Takes either asks or bids array from snapshot message and makes a TreeMap of price and size
+     * Takes either asks or bids array from snapshot message and makes a TreeMap of price and size.
      * @param priceAndSizeArrayNode an array containing orders of price and corresponding size
      * @param orderType either "asks" or "bids" array
      * @return
