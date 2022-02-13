@@ -1,5 +1,3 @@
-# GSR Java Software Engineer Development Exercise - Stewart Young
-
 ## Project Overview
 This project contains a number of key components
 * An order book of 10 levels: 10 bid prices below and 10 offer prices above current market price
