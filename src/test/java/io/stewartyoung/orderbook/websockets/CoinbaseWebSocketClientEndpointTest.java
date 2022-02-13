@@ -1,4 +1,4 @@
-package io.stewartyoung.gsr.websockets;
+package io.stewartyoung.orderbook.websockets;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;

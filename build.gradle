@@ -53,7 +53,7 @@ test {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'io.stewartyoung.gsr.Main'
+                'Main-Class': 'io.stewartyoung.orderbook.Main'
         )
     }
 }

@@ -1,6 +1,6 @@
-package io.stewartyoung.gsr.api;
+package io.stewartyoung.orderbook.api;
 
-import io.stewartyoung.gsr.model.OrderBook;
+import io.stewartyoung.orderbook.model.OrderBook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

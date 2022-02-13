@@ -1,6 +1,6 @@
-package io.stewartyoung.gsr;
+package io.stewartyoung.orderbook;
 
-import io.stewartyoung.gsr.websockets.CoinbaseWebSocketClientEndpoint;
+import io.stewartyoung.orderbook.websockets.CoinbaseWebSocketClientEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

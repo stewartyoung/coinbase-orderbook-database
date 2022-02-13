@@ -1,4 +1,4 @@
-package io.stewartyoung.gsr.model;
+package io.stewartyoung.orderbook.model;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;

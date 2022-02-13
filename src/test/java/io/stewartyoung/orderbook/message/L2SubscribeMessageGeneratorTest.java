@@ -1,4 +1,4 @@
-package io.stewartyoung.gsr.message;
+package io.stewartyoung.orderbook.message;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Assertions;

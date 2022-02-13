@@ -1,10 +1,10 @@
-package io.stewartyoung.gsr.api;
+package io.stewartyoung.orderbook.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.stewartyoung.gsr.model.Order;
-import io.stewartyoung.gsr.model.OrderBook;
-import io.stewartyoung.gsr.model.OrderBookUpdate;
+import io.stewartyoung.orderbook.model.Order;
+import io.stewartyoung.orderbook.model.OrderBook;
+import io.stewartyoung.orderbook.model.OrderBookUpdate;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
