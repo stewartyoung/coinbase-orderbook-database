@@ -1,0 +1,48 @@
+// build.gradle (Parent)
+
+// Define the backend and frontend projects
+//include'backend', 'frontend'
+
+// Configuration for the backend project
+project(':backend') {
+    // Apply common configurations and dependencies for backend projects
+    apply plugin: 'java'
+
+    dependencies {
+        // Add backend dependencies
+        // For example:
+        // implementation 'com.example:backend-library:1.0.0'
+    }
+
+    // Define tasks specific to the backend project
+    task backendBuild(type: GradleBuild) {
+        // Specify the build script to execute for the backend project
+        buildFile = 'backend/build.gradle'
+    }
+}
+
+// Configuration for the frontend project
+project(':frontend') {
+    // Apply common configurations and dependencies for frontend projects
+//    apply plugin: 'node'
+
+    dependencies {
+        // Add frontend dependencies
+        // For example:
+        // implementation 'com.example:frontend-library:1.0.0'
+    }
+
+    // Define tasks specific to the frontend project
+    task frontendBuild(type: Exec) {
+        // Specify the command to build the frontend project
+        commandLine 'npm', 'run', 'build'
+        workingDir = file('frontend') // Set the working directory to the frontend project directory
+    }
+}
+
+// Define a task to orchestrate the builds of both backend and frontend projects
+task buildAll {
+    dependsOn ':backend:backendBuild', ':frontend:frontendBuild'
+}
+
+// Add any additional configurations or tasks here

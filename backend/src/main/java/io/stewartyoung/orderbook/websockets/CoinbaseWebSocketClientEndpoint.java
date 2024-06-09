@@ -20,7 +20,7 @@ import java.net.URISyntaxException;
 public class CoinbaseWebSocketClientEndpoint {
     private final Logger LOG = LoggerFactory.getLogger(CoinbaseWebSocketClientEndpoint.class);
 
-    private final String coinbaseWebSocketUri = "wss://ws-feed.pro.coinbase.com/";
+    private final String coinbaseWebSocketUri = "wss://ws-feed.prime.coinbase.com/";
     @Setter(AccessLevel.PACKAGE)
     private WebSocketClientEndpoint webSocketClientEndpoint;
     private CoinbaseMessageConverter coinbaseMessageConverter;

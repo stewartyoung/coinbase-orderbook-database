@@ -8,7 +8,7 @@ This project contains a number of key components
     * Market data (what we're using): provide market data and are public
 
 ## Java Implementation Specifics
-* Java 11
+* Java 17
 
 ## Running instructions
 This project includes a dockerfile, meaning you can run this code from within a docker container on any device.

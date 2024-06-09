@@ -1,0 +1,21 @@
+// frontend/build.gradle
+
+// Apply the Node plugin to enable Node.js related tasks
+plugins {
+//    id 'node'
+}
+
+// Define the Node.js version
+//node {
+//    version = '20.13.1'
+//    npmVersion = '10.5.2'
+//}
+
+// Define dependencies specific to the frontend project
+dependencies {
+    // Add frontend dependencies here
+    // For example:
+    // implementation 'com.example:frontend-library:1.0.0'
+}
+
+// Define custom tasks or configurations for the frontend project here
