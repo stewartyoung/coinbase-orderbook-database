@@ -1,0 +1,83 @@
+snapshots.txt
+output.txt
+# Gradle
+.gradle/
+build/
+# Do not ignore these files
+!gradle/wrapper/gradle-wrapper.jar
+!gradlew
+!gradlew.bat
+
+# Java
+*.class
+*.war
+*.ear
+
+# IDEA
+*.iml
+.idea/
+
+# Eclipse
+.project
+.classpath
+.c9/
+.settings/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Logs
+*.log
+
+# Temporary files
+*.swp
+*~
+.tmp
+
+# IDEs and Editors
+*.idea/
+*.vscode/
+*.project
+*.classpath
+*.c9/
+*.launch
+.settings/
+bin/
+target/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build results
+build/
+out/
+
+# Gradle specific
+.gradle/
+build/
+
+# Others
+*.bak
+*.tmp
+*.old
+*.swp
+*.swo
+
+# Ignore generated files
+/target/
+/build/
+
+# Ignore Gradle caches
+.caches/
+/.gradle/
+/gradle-app.setting/
